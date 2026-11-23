@@ -1484,7 +1484,7 @@ async function ghPull(){
   try{
     ghStatus('Checking the repository…');
     const remote=await ghGet(c); const text=snapshot();
-    if(!remote){ c.sha=null; ghSave(); if(c.token&&(entries.length||c.synced)) await ghPush(true); else ghStatus('No data file in the repository yet. It is created when you add a Pokémon.'); return; }
+    if(!remote){ c.sha=null; ghSave(); if(c.token&&(entries.length||c.synced)) await ghPush(true); else if(!c.token) ghStatus('No data file in the repository yet, and no token entered, so nothing can be saved. Add the token and press Connect.'); else ghStatus('No data file in the repository yet, and the box on this page is empty (each web address keeps its own box). Restore a backup or add a Pokémon here to create it.'); return; }
     if(remote.text===text){ c.sha=remote.sha; c.synced=text; ghSave(); ghStatus('Up to date.'); return; }
     const localEmpty=!entries.length;
     const localUnchanged=c.synced!==undefined&&c.synced===text;
