@@ -126,7 +126,7 @@ summary{cursor:pointer;font-weight:600}
         <div id="p-form" hidden style="display:none;flex-direction:column;gap:12px">
           <h3 id="p-title" style="font:700 17px var(--display)"></h3>
           <div class="row">
-            <label>Level<input id="p-level" type="number" min="1" max="70" value="50"></label>
+            <label>Level<input id="p-level" type="number" min="1" max="70" value="1"></label>
             <label>Nature<select id="p-nature"></select></label>
             <label>Main skill level<input id="p-sklv" type="number" min="1" max="8" value="1"></label>
             <label>Ribbon<select id="p-ribbon"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></label>
@@ -334,7 +334,7 @@ summary{cursor:pointer;font-weight:600}
       let choices = [0, 0, 0];
       if (typeof e.ing === 'string' && /^[A-Ca-c]{1,3}$/.test(e.ing.trim())) choices = e.ing.trim().split('');
       else if (Array.isArray(e.ing)) choices = [e.ing[0], e.ing[1], e.ing[2]];
-      const lists = [sp.i0, level >= 30 ? sp.i30 : null, level >= 60 ? sp.i60 : null];
+      const lists = [sp.i0, (planAhead || level >= 30) ? sp.i30 : null, (planAhead || level >= 60) ? sp.i60 : null];
       const slots = [];
       const slotLabels = [];
       lists.forEach((list, k) => {
@@ -1255,7 +1255,7 @@ function drawEditor(){
     const row=document.createElement('div'); row.className='ingrow'; row.innerHTML='<span>'+label+'</span>';
     const opts=(list||[]).map((x,idx)=>({x,idx})).filter(o=>o.x.a>0);
     if(!opts.length){ row.insertAdjacentHTML('beforeend','<span class="hint" style="width:auto">none</span>'); }
-    opts.forEach(o=>{ const b=document.createElement('button'); b.className='chip'; b.textContent=o.x.n+' ×'+o.x.a; b.dataset.k=k; b.dataset.i=o.idx; b.disabled=lv<thr; b.setAttribute('aria-pressed',ed.ing[k]===o.idx); row.appendChild(b); });
+    opts.forEach(o=>{ const b=document.createElement('button'); b.className='chip'; b.textContent=o.x.n+' ×'+o.x.a; b.dataset.k=k; b.dataset.i=o.idx; b.setAttribute('aria-pressed',ed.ing[k]===o.idx); row.appendChild(b); });
     ing.appendChild(row);
   });
   const pa=$('s-planahead').checked;
@@ -1265,12 +1265,10 @@ function drawEditor(){
   const sb=$('p-subs'); sb.innerHTML='';
   UNLOCK.forEach((u,i)=>{
     const row=document.createElement('div'); row.className='group';
-    const on=pa||lv>=u;
     const lab=document.createElement('b'); lab.textContent='Level '+u; lab.style.width='64px'; row.appendChild(lab);
     const sel=document.createElement('select'); sel.dataset.slot=i; sel.setAttribute('aria-label','Subskill unlocked at level '+u);
     sel.innerHTML='<option value="">(none)</option>'+GROUPS.map(([g,names])=>'<optgroup label="'+g+'">'+names.map(n=>'<option'+(ed.subs[i]===n?' selected':'')+'>'+n+'</option>').join('')+'</optgroup>').join('');
     row.appendChild(sel);
-    const st=document.createElement('span'); st.className='hint'; st.style.width='auto'; st.textContent=on?'counted':'not counted until level '+u+(u>MAXLV?' (the level cap is currently '+MAXLV+')':''); row.appendChild(st);
     sb.appendChild(row);
   });
   const nat=DATA.natures.find(n=>n.name===$('p-nature').value);
