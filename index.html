@@ -106,10 +106,14 @@ summary{cursor:pointer;font-weight:600}
 
 <section id="box-sec">
   <h2>1. Your box</h2>
-  <p class="hint">Add Pokémon with the picker below. Your box is kept in this browser, and the Backup section at the bottom lets you save and restore it as text.</p>
+  <p class="hint">Add Pokémon with the picker under the list. Your box is kept in this browser, and the Backup section at the bottom lets you save and restore it as text.</p>
   <div id="import-msg" class="hint" role="status"></div>
 
-  <details id="add-panel" open>
+
+  <div id="box-count" class="hint"></div>
+  <div id="box-table" class="boxlist" role="list"></div>
+
+  <details id="add-panel" style="margin-top:12px">
     <summary>Add a Pokémon</summary>
     <div class="picker">
       <div style="display:flex;flex-direction:column;gap:8px">
@@ -137,9 +141,6 @@ summary{cursor:pointer;font-weight:600}
       </div>
     </div>
   </details>
-
-  <div id="box-count" class="hint"></div>
-  <div id="box-table" class="boxlist" role="list"></div>
 </section>
 
 <section id="set-sec">
